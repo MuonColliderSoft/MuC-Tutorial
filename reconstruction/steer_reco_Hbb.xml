@@ -18,7 +18,7 @@
     <processor name="Config" />
 
     <!-- ==========  Geometry initialization  ========== -->
-    <processor name="InitDD4hep_mod4"/>
+    <processor name="InitDD4hep"/>
 
     <!-- ==========  Overlay  ========== -->
     <if condition="Config.OverlayBIB">
@@ -100,7 +100,7 @@
     <!--Which option to use for Overlay: False, BIB. Then use, e.g., Config.OverlayFalse in the condition-->
     <parameter name="Overlay" type="string">False</parameter>
     <!--Possible values and conditions for option Overlay-->
-    <parameter name="OverlayChoices" type="StringVec">False BIB</parameter>
+    <parameter name="OverlayChoices" type="StringVec">False BIB Trimmed</parameter>
     <!--Which option to use for Tracking: Truth, ConformalPlusExtrapolator, Conformal. Then use, e.g., Config.TrackingTruth in the condition-->
     <parameter name="Tracking" type="string">Conformal </parameter>
     <!--Possible values and conditions for option Tracking-->
@@ -216,13 +216,13 @@
   <!-- ======================================================================================================== -->
   <!-- ======================================================================================================== -->
   
-  <processor name="InitDD4hep_mod4" type="InitializeDD4hep">
+  <processor name="InitDD4hep" type="InitializeDD4hep">
     <!--InitializeDD4hep reads a compact xml file and initializes the DD4hep::LCDD object-->
     <!--Name of the DD4hep compact xml file to load-->
     <parameter name="EncodingStringParameter"> GlobalTrackerReadoutID </parameter>
-    <!-- ALE - Use the modified geometry -->
+    <!-- Path to the geometry XML file -->
     <parameter name="DD4hepXMLFile" type="string">
-      /opt/ilcsoft/v02-01-pre/detector-simulation/geometries/CLIC_o3_v14_mod4/CLIC_o3_v14.xml
+      /opt/ilcsoft/muonc/detector-simulation/geometries/MuColl_v1/MuColl_v1.xml
     </parameter>
   </processor>
 
@@ -275,38 +275,35 @@
     <parameter name="BackgroundFileNames" type="StringVec">
     </parameter>
 
-      <processor name="OverlayFalse" type="OverlayTimingGeneric">
-        <parameter name="BackgroundFileNames" type="StringVec"> </parameter>
-        <parameter name="NBunchtrain" type="int" value="0"/>
-        <parameter name="NumberBackground" type="float" value="0."/>
-      </processor>
+    <processor name="OverlayFalse" type="OverlayTimingGeneric">
+      <parameter name="BackgroundFileNames" type="StringVec"> /dev/null</parameter>
+      <parameter name="NBunchtrain" type="int" value="0"/>
+      <parameter name="NumberBackground" type="float" value="0."/>
+    </processor>
 
     <processor name="OverlayBIB" type="OverlayTimingGeneric">
       <parameter name="BackgroundFileNames" type="StringVec">
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j1.slcio
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j2.slcio
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j3.slcio
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j4.slcio
-        /data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j5.slcio
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j6.slcio
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j7.slcio
-	/data/samples/BIB/sim_mumi-1e3x500-26m-lowth-excl_j8.slcio
-	/data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j1.slcio
-	/data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j2.slcio
-	/data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j3.slcio
-	/data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j4.slcio
-        /data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j5.slcio
-        /data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j6.slcio
-        /data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j7.slcio
-	/data/samples/BIB/sim_mupl-1e3x500-26m-lowth-excl_j8.slcio
+        /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mumi-1e3x500-26m-lowth-excl_c00.slcio
+        /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mupl-1e3x500-26m-lowth-excl_c00.slcio
       </parameter>
       <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
       <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
       <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT">WARNING </parameter>
       <parameter name="NBunchtrain" type="int" value="1" />
-      <!--<parameter name="NumberBackground" type="float" value="2993" />-->
-      <parameter name="NumberBackground" type="float" value="10" />
+      <parameter name="NumberBackground" type="float" value="2993" />
     </processor>
+
+    <processor name="OverlayTrimmed" type="OverlayTimingGeneric">
+      <parameter name="BackgroundFileNames" type="StringVec">
+        /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mumu-1e3x500-26m-lowth-excl_c00_allHits.slcio
+      </parameter>
+      <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
+      <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
+      <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT">WARNING </parameter>
+      <parameter name="NBunchtrain" type="int" value="1" />
+      <parameter name="NumberBackground" type="float" value="1" />
+    </processor>
+
 
 
   </group>

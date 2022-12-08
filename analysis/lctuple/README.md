@@ -1,12 +1,12 @@
 # Analysis based on LCTuple processor
 
-The following command will convert events from the input file into a ROOT TTree representation
+The following command will convert events from the input file into a ROOT TTree.
 
 ```
-Marlin lctuple_steer.xml > ntuples.log 2>&1
+Marlin steer_lctuple.xml > ntuple.log 2>&1
 ```
 
-Final root file with ntuples: `JetHistograms.root`
+The resulting ntuple will be saved to `ntuple.root`
 
 
 A simple macro can be used for analysis of the resulting TTree:
