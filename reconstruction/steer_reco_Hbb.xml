@@ -89,10 +89,6 @@
     <parameter name="Overlay" type="string">False</parameter>
     <!--Possible values and conditions for option Overlay-->
     <parameter name="OverlayChoices" type="StringVec">False Test BIB Trimmed</parameter>
-    <!--Which option to use for Tracking: Truth, ConformalPlusExtrapolator, Conformal. Then use, e.g., Config.TrackingTruth in the condition-->
-    <parameter name="Tracking" type="string">Conformal </parameter>
-    <!--Possible values and conditions for option Tracking-->
-    <parameter name="TrackingChoices" type="StringVec">Truth Conformal Acts </parameter>
     <!--Which option to use for VertexUnconstrained: ON, OFF. Then use, e.g., Config.VertexUnconstrainedOFF in the condition-->
     <parameter name="VertexUnconstrained" type="string">OFF </parameter>
     <!--Possible values and conditions for option Tracking-->
