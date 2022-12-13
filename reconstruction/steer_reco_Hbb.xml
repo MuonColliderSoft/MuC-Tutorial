@@ -62,9 +62,7 @@
   </execute>
 
   <global>
-    <parameter name="LCIOInputFiles">
-      input_file.slcio
-    </parameter>
+    <parameter name="LCIOInputFiles">input_file.slcio</parameter>
     <!-- Limit the number of processed records (run+evt): -->
     <parameter name="MaxRecordNumber" value="-1" />
     <parameter name="SkipNEvents" value="0" />
@@ -73,15 +71,17 @@
     <parameter name="RandomSeed" value="1234567890" />
   </global>
 
+  <!-- Including processor definitions from external files -->
+
   <include ref="subconfigs/InitDD4hep.xml"/>
-  <include ref="subconfigs/LCTuple.xml"/>
-  <include ref="subconfigs/DigiOverlay.xml"/>
+  <include ref="subconfigs/Overlay.xml"/>
   <include ref="subconfigs/TrackerDigitization.xml"/>
   <include ref="subconfigs/Tracking.xml"/>
   <include ref="subconfigs/CaloDigitization.xml"/>
-  <include ref="subconfigs/Monitoring.xml"/>
   <include ref="subconfigs/PFOSelector.xml"/>
   <include ref="subconfigs/VertexJet.xml"/>
+
+  <!-- Defining other processors directly in the steering file -->
 
   <processor name="Config" type="CLICRecoConfig" >
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT"> MESSAGE  </parameter>
