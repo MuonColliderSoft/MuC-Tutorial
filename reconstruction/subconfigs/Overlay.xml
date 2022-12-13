@@ -48,19 +48,23 @@
 
   <processor name="OverlayBIB" type="OverlayTimingGeneric">
     <parameter name="BackgroundFileNames" type="StringVec">
-      /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mumi-1e3x500-26m-lowth-excl_c00.slcio 
-      /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mupl-1e3x500-26m-lowth-excl_c00.slcio 
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c00.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c01.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c02.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c03.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c04.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c05.slcio
     </parameter>
     <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
     <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
     <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT">WARNING </parameter>
     <parameter name="NBunchtrain" type="int" value="1" />
-    <parameter name="NumberBackground" type="float" value="2993" />
+    <parameter name="NumberBackground" type="float" value="1499" />
   </processor>
 
   <processor name="OverlayTrimmed" type="OverlayTimingGeneric">
     <parameter name="BackgroundFileNames" type="StringVec">
-      /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mumu-1e3x500-26m-lowth-excl_c00_allHits.slcio
+      ./sim-1e3x500-26m-lowth-excl_c00_trimmed.slcio
     </parameter>
     <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
     <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
@@ -71,14 +75,18 @@
 
   <processor name="OverlayTest" type="OverlayTimingGeneric">
     <parameter name="BackgroundFileNames" type="StringVec">
-      /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mumi-1e3x500-26m-lowth-excl_c00.slcio 
-      /muoncdata/data/1500GeV/BIB/ddsim/MuCollv1_25ns_nEkin150MeV_QGSPBERT/sim_mupl-1e3x500-26m-lowth-excl_c00.slcio 
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c00.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c01.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c02.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c03.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c04.slcio
+      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c05.slcio
     </parameter>
     <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
     <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
     <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT">WARNING </parameter>
     <parameter name="NBunchtrain" type="int" value="1" />
-    <parameter name="NumberBackground" type="float" value="100" />
+    <parameter name="NumberBackground" type="float" value="150" />
   </processor>
 
 </group>
