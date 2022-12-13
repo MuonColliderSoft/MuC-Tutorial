@@ -73,12 +73,10 @@ href="http://ilcsoft.desy.de/marlin/marlin.xsl"?
     <!--Names of LCRelation collections - need parallel prefix names in RelPrefixes-->
     <parameter name="LCRelationCollections" type="StringVec" lcioInType="LCRelation">
       RecoMCTruthLink 
-      SiTracksMCTruthLink
     </parameter>
     <!-- Names of prefixes for variables from LCRelation collections - needs to be parallel to LCRelationCollections (one prefix per collection)-->
     <parameter name="LCRelationPrefixes" type="StringVec">  
       r2m  
-      r2t  
     </parameter>
     <!--Names of LCRelation collections of PFO-->
     <parameter name="LCRelationwithPFOCollections" type="string" lcioInType="LCRelation"> </parameter>
@@ -90,7 +88,7 @@ href="http://ilcsoft.desy.de/marlin/marlin.xsl"?
     <!--Name of the PFO collection with Relation-->
     <!--parameter name="PFOwithRelationCollection" type="string" lcioInType="ReconstructedParticle"> </parameter-->
     <!--Name of the ReconstructedParticle collection-->
-    <parameter name="RecoParticleCollection" type="string" lcioInType="ReconstructedParticle"> MergedRecoParticles </parameter> 
+    <parameter name="RecoParticleCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
     <!--Name of the SimCalorimeterHit collection-->
     <parameter name="SimCalorimeterHitCollection" type="string" lcioInType="SimCalorimeterHit"> </parameter>
     <!--Name of the SimTrackerHit collection-->
