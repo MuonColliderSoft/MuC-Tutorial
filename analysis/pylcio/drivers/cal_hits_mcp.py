@@ -4,7 +4,7 @@ import math
 from pyLCIO.drivers.Driver import Driver
 from pyLCIO import EVENT, UTIL
 
-from pdb import set_trace as br
+from pdb import set_trace
 from utils import get_oldest_mcp_parent
 
 CONST_C = R.TMath.C()
