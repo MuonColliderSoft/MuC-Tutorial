@@ -53,7 +53,6 @@
       /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c02.slcio
       /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c03.slcio
       /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c04.slcio
-      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c05.slcio
     </parameter>
     <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
     <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
@@ -80,7 +79,6 @@
       /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c02.slcio
       /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c03.slcio
       /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c04.slcio
-      /data/samples/MuCollv1_25ns_nEkin150MeV_QGSPBERT_merged/sim-1e3x500-26m-lowth-excl_c05.slcio
     </parameter>
     <parameter name="StartBackgroundFileIndex" type="int" value="0"/>
     <parameter name="AllowReusingBackgroundFiles" type="bool" value="false" />
