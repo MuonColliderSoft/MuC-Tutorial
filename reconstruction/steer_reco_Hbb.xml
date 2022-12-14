@@ -134,7 +134,6 @@
       MCParticle
     </parameter>
     <parameter name="KeepCollectionNames" type="StringVec">
-      SiTracks
       SiTracks_Refitted
     </parameter>
     <parameter name="DropCollectionNames" type="StringVec"> MCParticle </parameter>
