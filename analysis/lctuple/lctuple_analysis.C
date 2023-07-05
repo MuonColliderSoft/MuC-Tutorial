@@ -92,7 +92,7 @@ void lctuple_analysis( const TString filename="lctuple_example.root", const long
   float *jet_ene = new float[1000];
   float *jet_q   = new float[1000];
 
-  myLCTuple->SetBranchAddress("nj", &n_jet);
+  myLCTuple->SetBranchAddress("njet", &n_jet);
   myLCTuple->SetBranchAddress("jmox", jet_px);
   myLCTuple->SetBranchAddress("jmoy", jet_py);
   myLCTuple->SetBranchAddress("jmoz", jet_pz);
