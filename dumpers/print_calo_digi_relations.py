@@ -15,13 +15,19 @@ ALL_CAL_COLLECTIONS = [
     "HCalEndcapCollection",
 ]
 
+
 def options():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", required=True, type=str, help="Input LCIO file")
     parser.add_argument(
         "-n", required=False, type=int, help="Number of events to process"
     )
-    parser.add_argument("--nhits", default=10, type=int, help="Max number of hits to dump for each collection")
+    parser.add_argument(
+        "--nhits",
+        default=10,
+        type=int,
+        help="Max number of hits to dump for each collection",
+    )
     return parser.parse_args()
 
 
@@ -52,18 +58,25 @@ def main():
 
             def which_container_contains(hit):
                 return ",".join([col for col in cols if hit in cols[col]])
+
             digi_col = which_container_contains(digi_hit)
             sim_col = which_container_contains(sim_hit)
 
             digi_position = digi_hit.getPosition()
-            digi_x, digi_y, digi_z = digi_position[X], digi_position[Y], digi_position[Z]
+            digi_x, digi_y, digi_z = (
+                digi_position[X],
+                digi_position[Y],
+                digi_position[Z],
+            )
             n_sim_contrib = sim_hit.getNMCContributions()
 
             digi_print = f"Hit with x, y, z = {digi_x:7.1f}, {digi_y:7.1f}, {digi_z:7.1f} ({digi_col})"
             sim_print = f"sim hit with {n_sim_contrib} MC contributions ({sim_col})"
 
-            print(f"Event {i_event} relation {i_rel}: {digi_print} linked to {sim_print}")
-            
+            print(
+                f"Event {i_event} relation {i_rel}: {digi_print} linked to {sim_print}"
+            )
+
         print("")
 
 

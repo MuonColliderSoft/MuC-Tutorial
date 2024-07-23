@@ -9,14 +9,21 @@ CAL_COLLECTIONS = [
     "HCalEndcapCollection",
 ]
 
+
 def options():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", required=True, type=str, help="Input LCIO file")
     parser.add_argument(
-	"-n", required=False, type=int, help="Number of events to process"
+        "-n", required=False, type=int, help="Number of events to process"
     )
-    parser.add_argument("--nhits", default=10, type=int, help="Max number of hits to dump for each collection")
+    parser.add_argument(
+        "--nhits",
+        default=10,
+        type=int,
+        help="Max number of hits to dump for each collection",
+    )
     return parser.parse_args()
+
 
 def main():
     ops = options()
@@ -40,20 +47,27 @@ def main():
 
             # get encoding, and create decoder
             if collection:
-                encoding = collection.getParameters().getStringVal(EVENT.LCIO.CellIDEncoding)
+                encoding = collection.getParameters().getStringVal(
+                    EVENT.LCIO.CellIDEncoding
+                )
                 decoder = UTIL.BitField64(encoding)
                 print(f"Collection {col_name} has encoding {encoding}")
 
             for i_hit, hit in enumerate(collection):
-                decoder.setValue((hit.getCellID0() & 0xFFFFFFFF) | (hit.getCellID1() << 32))
+                decoder.setValue(
+                    (hit.getCellID0() & 0xFFFFFFFF) | (hit.getCellID1() << 32)
+                )
                 layer = decoder["layer"].value()
                 system = decoder["system"].value()
                 systemname = system2name[system]
-                print(f"Event {i_event} hit {i_hit} is on layer {layer} of {systemname}")
+                print(
+                    f"Event {i_event} hit {i_hit} is on layer {layer} of {systemname}"
+                )
                 if i_hit > ops.nhits:
                     break
 
         print("")
+
 
 if __name__ == "__main__":
     main()

@@ -10,13 +10,19 @@ CAL_COLLECTIONS = [
     "HCALEndcapHits",
 ]
 
+
 def options():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", required=True, type=str, help="Input LCIO file")
     parser.add_argument(
         "-n", required=False, type=int, help="Number of events to process"
     )
-    parser.add_argument("--nhits", default=10, type=int, help="Max number of hits to dump for each collection")
+    parser.add_argument(
+        "--nhits",
+        default=10,
+        type=int,
+        help="Max number of hits to dump for each collection",
+    )
     return parser.parse_args()
 
 
