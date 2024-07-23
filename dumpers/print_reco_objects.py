@@ -7,7 +7,9 @@ TRACK_COL = "SiTracks_Refitted"
 CLUSTER_COL = "PandoraClusters"
 PFO_COL = "PandoraPFOs"
 BFIELD = 5.0
-MAGIC_MULTIPLIER = 2.99792e-4
+
+# https://bib-pubdb1.desy.de/record/81214/files/LC-DET-2006-004%5B1%5D.pdf
+FACTOR = 3e-4
 
 
 def options():
@@ -43,8 +45,7 @@ def main():
                 track.getPhi(),
             )
             theta = (math.pi / 2) - math.atan(tan_lambda)
-            # https://github.com/PandoraPFA/MarlinPandora/blob/master/src/TrackCreator.cc#L603
-            pt = BFIELD * MAGIC_MULTIPLIER / omega
+            pt = BFIELD * FACTOR / abs(omega)
             pz = pt * tan_lambda
             p = math.sqrt(pt * pt + pz * pz)
             chi2, ndf = track.getChi2(), track.getNdf()
