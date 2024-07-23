@@ -8,6 +8,7 @@ import ROOT
 ROOT.gROOT.SetBatch()
 
 DATA_PATH = "/ospool/uc-shared/project/futurecolliders/data/fmeloni/DataMuC_MuColl10_v0A/v2/reco/pionGun_pT_50_250"
+PDF = "plots.pdf"
 
 MCPARTICLES = "MCParticle"
 CLUSTERS = "PandoraClusters"
@@ -37,10 +38,10 @@ def fill_histograms(h2d):
     reader = pyLCIO.IOIMPL.LCFactory.getInstance().createLCReader()
     reader.setReadCollectionNames(COLS)
 
-    filenames = get_files(2)
-    for filename in filenames:
+    filenames = get_files()
+    for i_filename, filename in enumerate(filenames):
 
-        print(f"Analyzing {filename}")
+        print(f"Analyzing {filename} ({i_filename} / {len(filenames)})")
         reader.open(filename)
 
         for event in reader:
@@ -51,12 +52,28 @@ def fill_histograms(h2d):
             h2d["mcp_vs_clu_p"].Fill(mcp_p, clu_p)
             h2d["mcp_vs_trk_p"].Fill(mcp_p, trk_p)
             h2d["mcp_vs_pfo_p"].Fill(mcp_p, pfo_p)
-            print(f"mcp_p = {mcp_p:5.1f} trk_p = {trk_p:5.1f} clu_p = {clu_p:5.1f} pfo_p = {pfo_p:5.1f}")
+            # print(f"mcp_p = {mcp_p:5.1f} trk_p = {trk_p:5.1f} clu_p = {clu_p:5.1f} pfo_p = {pfo_p:5.1f}")
 
         reader.close()
 
 def plot_histograms(h2d):
-    pass
+    for i_hist, hist in enumerate(h2d.values()):
+        canv = ROOT.TCanvas(f"canv_{i_hist}", "canv_{i_hist}", 800, 800)
+        canv.Draw()
+        hist.Draw("colzsame")
+        suff = suffix(i_hist, len(h2d))
+        canv.Print(PDF + suff, "pdf")
+
+def suffix(counter, total):
+    if total == 1:
+        return ""
+    else:
+        if counter == 0:
+            return "("
+        elif counter == total - 1:
+            return ")"
+        else:
+            return ""
         
 def get_histograms():
     h2d = {}
@@ -65,7 +82,7 @@ def get_histograms():
     h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy;Events", 100, 0, 300, 100, 0, 300)
     return h2d
         
-def get_files(num):
+def get_files(num=-1):
     files = sorted(glob.glob(DATA_PATH + "/*.slcio"))
     if num != -1:
         files = files[:num]
