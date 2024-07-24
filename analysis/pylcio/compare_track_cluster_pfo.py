@@ -57,9 +57,11 @@ def fill_histograms(h2d):
         reader.close()
 
 def plot_histograms(h2d):
+    rootlogon()
     for i_hist, hist in enumerate(h2d.values()):
         canv = ROOT.TCanvas(f"canv_{i_hist}", "canv_{i_hist}", 800, 800)
         canv.Draw()
+        stylize(hist)
         hist.Draw("colzsame")
         suff = suffix(i_hist, len(h2d))
         canv.Print(PDF + suff, "pdf")
@@ -77,9 +79,9 @@ def suffix(counter, total):
         
 def get_histograms():
     h2d = {}
-    h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy;Events", 100, 0, 1000, 100, 0, 1000)
-    h2d["mcp_vs_trk_p"] = ROOT.TH2D("mcp_vs_trk_p", ";True momentum [GeV];Track momentum;Events", 100, 0, 1000, 100, 0, 1000)
-    h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy;Events", 100, 0, 1000, 100, 0, 1000)
+    h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy [GeV];Events", 100, 0, 1000, 100, 0, 1000)
+    h2d["mcp_vs_trk_p"] = ROOT.TH2D("mcp_vs_trk_p", ";True momentum [GeV];Track momentum [GeV];Events", 100, 0, 1000, 100, 0, 1000)
+    h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy [GeV];Events", 100, 0, 1000, 100, 0, 1000)
     return h2d
         
 def get_files(num=-1):
@@ -141,6 +143,35 @@ def get_theta(px, py, pz):
 
 def get_phi(px, py):
     return math.atan2(py, px)
+
+def rootlogon():
+    ROOT.gStyle.SetOptStat(0)
+    ROOT.gStyle.SetPadTickX(1)
+    ROOT.gStyle.SetPadTickY(1)
+    ROOT.gStyle.SetPaintTextFormat(".2f")
+    ROOT.gStyle.SetTextFont(42)
+    ROOT.gStyle.SetFillColor(10)
+    # ROOT.gStyle.SetPalette(ROOT.kCherry)
+    # ROOT.TColor.InvertPalette()
+    ROOT.gStyle.SetPadTopMargin(0.06)
+    ROOT.gStyle.SetPadRightMargin(0.19)
+    ROOT.gStyle.SetPadBottomMargin(0.10)
+    ROOT.gStyle.SetPadLeftMargin(0.15)
+
+def stylize(hist):
+    size = 0.04
+    hist.SetLineWidth(2)
+    hist.GetXaxis().SetTitleSize(size)
+    hist.GetXaxis().SetLabelSize(size)
+    hist.GetYaxis().SetTitleSize(size)
+    hist.GetYaxis().SetLabelSize(size)
+    hist.GetZaxis().SetTitleSize(size)
+    hist.GetZaxis().SetLabelSize(size)
+    hist.GetXaxis().SetTitleOffset(1.2)
+    hist.GetYaxis().SetTitleOffset(1.6)
+    hist.GetZaxis().SetTitleOffset(1.6)
+    hist.GetZaxis().SetLabelOffset(0.003)
+    hist.GetXaxis().SetNdivisions(505)
 
 if __name__ == "__main__":
     main()
