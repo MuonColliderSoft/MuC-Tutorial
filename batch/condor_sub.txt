@@ -1,0 +1,17 @@
+#
+# condor_submit condor_sub.txt
+#
+Universe = Vanilla
++SingularityImage = "osdf:///ospool/uc-shared/project/futurecolliders/tuna/k4toroid2.sif"
+Executable = condor_exe.sh
+Requirements = ( HAS_SINGULARITY ) && ( HAS_CVMFS_unpacked_cern_ch )
+should_transfer_files = YES
+Output = condor_out.$(Cluster)_$(Process).txt
+Log = condor_log.$(Cluster)_$(Process).txt
+Error = condor_err.$(Cluster)_$(Process).txt
+when_to_transfer_output = ON_EXIT
+request_cpus = 1
+request_disk = 15 GB
+request_memory = 10 GB
++ProjectName="collab.futurecolliders"
+Queue 1
