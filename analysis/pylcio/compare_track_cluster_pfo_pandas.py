@@ -1,11 +1,10 @@
 import argparse
 import glob
 import math
-import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import pyLCIO
-
-import ROOT
-ROOT.gROOT.SetBatch()
 
 DATA_PATH = "/ospool/uc-shared/project/futurecolliders/data/fmeloni/DataMuC_MuColl10_v0A/v2/reco/pionGun_pT_50_250"
 PDF = "plots.pdf"
@@ -28,59 +27,57 @@ FACTOR = 3e-4
 
 def main():
 
-    h2d = get_histograms()
-    fill_histograms(h2d)
-    plot_histograms(h2d)
+    df = get_dataframe()
+    plot_dataframe(df)
 
-def fill_histograms(h2d):
+def get_dataframe():
+
+    data = {
+        "mcp_p": [],
+        "trk_p": [],
+        "clu_p": [],
+        "pfo_p": [],
+    }
+
+    for event in get_events():
+        mcp_p, mcp_theta, mcp_phi = get_leading_item(event, MCPARTICLES)
+        trk_p, trk_theta, trk_phi = get_leading_item(event, TRACKS)
+        clu_p, clu_theta, clu_phi = get_leading_item(event, CLUSTERS)
+        pfo_p, pfo_theta, pfo_phi = get_leading_item(event, PFOS)
+        data["mcp_p"].append(mcp_p)
+        data["trk_p"].append(trk_p)
+        data["clu_p"].append(clu_p)
+        data["pfo_p"].append(pfo_p)
+
+    return pd.DataFrame(data)
+
+def get_events():
 
     print("Opening slcio files ...")
-    reader = pyLCIO.IOIMPL.LCFactory.getInstance().createLCReader()
-    reader.setReadCollectionNames(COLS)
 
-    filenames = get_files()
-    for i_filename, filename in enumerate(filenames):
-
-        print(f"Analyzing {filename} ({i_filename} / {len(filenames)})")
+    for i_filename, filename in enumerate(get_files()):
+        print(f"Analyzing {filename} ({i_filename})")
+        reader = pyLCIO.IOIMPL.LCFactory.getInstance().createLCReader()
+        reader.setReadCollectionNames(COLS)
         reader.open(filename)
 
         for event in reader:
-            mcp_p, mcp_theta, mcp_phi = get_leading_item(event, MCPARTICLES)
-            trk_p, trk_theta, trk_phi = get_leading_item(event, TRACKS)
-            clu_p, clu_theta, clu_phi = get_leading_item(event, CLUSTERS)
-            pfo_p, pfo_theta, pfo_phi = get_leading_item(event, PFOS)
-            h2d["mcp_vs_clu_p"].Fill(mcp_p, clu_p)
-            h2d["mcp_vs_trk_p"].Fill(mcp_p, trk_p)
-            h2d["mcp_vs_pfo_p"].Fill(mcp_p, pfo_p)
-            # print(f"mcp_p = {mcp_p:5.1f} trk_p = {trk_p:5.1f} clu_p = {clu_p:5.1f} pfo_p = {pfo_p:5.1f}")
+            yield event
 
         reader.close()
 
-def plot_histograms(h2d):
-    for i_hist, hist in enumerate(h2d.values()):
-        canv = ROOT.TCanvas(f"canv_{i_hist}", "canv_{i_hist}", 800, 800)
-        canv.Draw()
-        hist.Draw("colzsame")
-        suff = suffix(i_hist, len(h2d))
-        canv.Print(PDF + suff, "pdf")
-
-def suffix(counter, total):
-    if total == 1:
-        return ""
-    else:
-        if counter == 0:
-            return "("
-        elif counter == total - 1:
-            return ")"
-        else:
-            return ""
-        
-def get_histograms():
-    h2d = {}
-    h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy;Events", 100, 0, 1000, 100, 0, 1000)
-    h2d["mcp_vs_trk_p"] = ROOT.TH2D("mcp_vs_trk_p", ";True momentum [GeV];Track momentum;Events", 100, 0, 1000, 100, 0, 1000)
-    h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy;Events", 100, 0, 1000, 100, 0, 1000)
-    return h2d
+def plot_dataframe(df):
+    print(df)
+    fig, ax = plt.subplots(figsize=(13, 4), ncols=3)
+    objects = ["Cluster", "Track", "PFO"]
+    measures = ["energy", "momentum", "energy"]
+    prefixs = ["clu", "trk", "pfo"]
+    bins = np.linspace(0, 1000, 100)
+    for i, (obj, measure, prefix) in enumerate(zip(objects, measures, prefixs)):
+        ax[i].set_xlabel("True momentum [GeV]")
+        ax[i].set_ylabel(f"{obj} {measure} [GeV]")
+        ax[i].hist2d(df["mcp_p"], df[f"{prefix}_p"], bins=bins, cmap="plasma", cmin=0.1)
+    plt.savefig("plots.df.pdf")
         
 def get_files(num=-1):
     files = sorted(glob.glob(DATA_PATH + "/*.slcio"))
@@ -95,6 +92,8 @@ def get_leading_item(event, col_name):
         return 0, 0, 0
     p, theta, phi = 0, 0, 0
     for obj in col:
+        if isinstance(obj, pyLCIO.EVENT.MCParticle) and obj.getGeneratorStatus() != 1:
+            continue
         this_p, this_theta, this_phi = get_properties(obj)
         if this_p > p:
             p, theta, phi = this_p, this_theta, this_phi
