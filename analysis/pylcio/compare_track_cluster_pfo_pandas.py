@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import pyLCIO
 
 DATA_PATH = "/ospool/uc-shared/project/futurecolliders/data/fmeloni/DataMuC_MuColl10_v0A/v2/reco/pionGun_pT_50_250"
-PDF = "plots.pdf"
+PDF = "plots.df.pdf"
 
 MCPARTICLES = "MCParticle"
 CLUSTERS = "PandoraClusters"
@@ -73,11 +73,15 @@ def plot_dataframe(df):
     measures = ["energy", "momentum", "energy"]
     prefixs = ["clu", "trk", "pfo"]
     bins = np.linspace(0, 1000, 100)
+    cbar = [None] * len(ax)
     for i, (obj, measure, prefix) in enumerate(zip(objects, measures, prefixs)):
-        ax[i].set_xlabel("True momentum [GeV]")
+        ax[i].set_xlabel("True energy [GeV]")
         ax[i].set_ylabel(f"{obj} {measure} [GeV]")
-        ax[i].hist2d(df["mcp_p"], df[f"{prefix}_p"], bins=bins, cmap="plasma", cmin=0.1)
-    plt.savefig("plots.df.pdf")
+        _, _, _, im = ax[i].hist2d(df["mcp_p"], df[f"{prefix}_p"], bins=bins, cmap="plasma", cmin=0.1)
+        cbar[i] = fig.colorbar(im, ax=ax[i])
+        cbar[i].set_label("Events")
+    fig.subplots_adjust(wspace=0.3, hspace=0.3, bottom=0.14, left=0.05, right=0.95, top=0.95)
+    plt.savefig(PDF)
         
 def get_files(num=-1):
     files = sorted(glob.glob(DATA_PATH + "/*.slcio"))
