@@ -7,7 +7,7 @@ import pyLCIO
 import ROOT
 ROOT.gROOT.SetBatch()
 
-DATA_PATH = "/ospool/uc-shared/project/futurecolliders/data/fmeloni/DataMuC_MuColl10_v0A/v2/reco/pionGun_pT_50_250"
+DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/pionGun_pT_50_250"
 PDF = "plots.pdf"
 
 MCPARTICLES = "MCParticle"
@@ -45,14 +45,17 @@ def fill_histograms(h2d):
         reader.open(filename)
 
         for event in reader:
-            mcp_p, mcp_theta, mcp_phi = get_leading_item(event, MCPARTICLES)
-            trk_p, trk_theta, trk_phi = get_leading_item(event, TRACKS)
-            clu_p, clu_theta, clu_phi = get_leading_item(event, CLUSTERS)
-            pfo_p, pfo_theta, pfo_phi = get_leading_item(event, PFOS)
+            mcps = event.getCollection(MCPARTICLES) or []
+            trks = event.getCollection(TRACKS) or []
+            clus = event.getCollection(CLUSTERS) or []
+            pfos = event.getCollection(PFOS) or []
+            mcp_p, mcp_theta, mcp_phi = get_leading_item(mcps)
+            trk_p, trk_theta, trk_phi = get_leading_item(trks)
+            clu_p, clu_theta, clu_phi = get_leading_item(clus)
+            pfo_p, pfo_theta, pfo_phi = get_leading_item(pfos)
             h2d["mcp_vs_clu_p"].Fill(mcp_p, clu_p)
             h2d["mcp_vs_trk_p"].Fill(mcp_p, trk_p)
             h2d["mcp_vs_pfo_p"].Fill(mcp_p, pfo_p)
-            # print(f"mcp_p = {mcp_p:5.1f} trk_p = {trk_p:5.1f} clu_p = {clu_p:5.1f} pfo_p = {pfo_p:5.1f}")
 
         reader.close()
 
@@ -91,8 +94,7 @@ def get_files(num=-1):
     print(f"Found {len(files)} files")
     return files
 
-def get_leading_item(event, col_name):
-    col = event.getCollection(col_name) or []
+def get_leading_item(col):
     if not col:
         return 0, 0, 0
     p, theta, phi = 0, 0, 0
