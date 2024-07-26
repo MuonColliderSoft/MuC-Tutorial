@@ -3,7 +3,7 @@ import math
 import pyLCIO
 
 X, Y, Z = 0, 1, 2
-TRACK_COL = "SiTracks_Refitted"
+TRACK_COL = "SiTracks"
 CLUSTER_COL = "PandoraClusters"
 PFO_COL = "PandoraPFOs"
 BFIELD = 5.0
@@ -33,9 +33,9 @@ def main():
         if ops.n is not None and i_event >= ops.n:
             break
 
-        tracks = event.getCollection(TRACK_COL) or []
-        clusters = event.getCollection(CLUSTER_COL) or []
-        pfos = event.getCollection(PFO_COL) or []
+        tracks = get_collection(event, TRACK_COL)
+        clusters = get_collection(event, CLUSTER_COL)
+        pfos = get_collection(event, PFO_COL)
 
         for i_track, track in enumerate(tracks):
             name = "track"
@@ -63,21 +63,27 @@ def main():
             momentum, energy = pfo.getMomentum(), pfo.getEnergy()
             pdg, charge = pfo.getType(), pfo.getCharge()
             px, py, pz = momentum[X], momentum[Y], momentum[Z]
-            theta, phi = getTheta(px, py, pz), getPhi(px, py)
+            theta, phi = get_theta(px, py, pz), get_phi(px, py)
             descr = f"e = {energy:5.1f} theta = {theta:5.2f} phi = {phi:5.2f} pdg = {pdg:4} charge = {charge}"
             print(f"Event {i_event} {name:8} {i_pfo} {descr}")
 
         print("")
 
 
-def getTheta(px, py, pz):
+def get_theta(px, py, pz):
     pt = math.sqrt(px**2 + py**2)
     return math.atan2(pt, pz)
 
 
-def getPhi(px, py):
+def get_phi(px, py):
     return math.atan2(py, px)
 
+
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()

@@ -4,10 +4,10 @@ import pyLCIO
 X, Y, Z = 0, 1, 2
 
 CAL_COLLECTIONS = [
-    "ECALBarrelHits",
-    "ECALEndcapHits",
-    "HCALBarrelHits",
-    "HCALEndcapHits",
+    "EcalBarrelCollectionDigi",
+    "EcalEndcapCollectionDigi",
+    "HcalBarrelCollectionDigi",
+    "HcalEndcapCollectionDigi",
 ]
 
 
@@ -41,7 +41,7 @@ def main():
 
         cols = {}
         for col in CAL_COLLECTIONS:
-            cols[col] = event.getCollection(col) or []
+            cols[col] = get_collection(event, col)
 
         print(f"Event {i_event} has")
         for col in cols:
@@ -57,6 +57,12 @@ def main():
 
         print("")
 
+
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()
