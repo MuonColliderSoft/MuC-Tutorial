@@ -40,9 +40,9 @@ def main():
             break
 
         cols = {}
-        cols["MCParticle"] = event.getCollection("MCParticle") or []
+        cols["MCParticle"] = get_collection(event, "MCParticle")
         for col in CAL_COLLECTIONS:
-            cols[col] = event.getCollection(col) or []
+            cols[col] = get_collection(event, col)
 
         print(f"Event {i_event} has")
         for col in cols:
@@ -75,6 +75,12 @@ def main():
 
         print("")
 
+
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()

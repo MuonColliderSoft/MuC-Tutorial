@@ -91,7 +91,7 @@ def get_files(num=-1):
     return files
 
 def get_leading_item(event, col_name):
-    col = event.getCollection(col_name) or []
+    col = get_collection(event, col_name)
     if not col:
         return 0, 0, 0
     p, theta, phi = 0, 0, 0
@@ -138,12 +138,21 @@ def get_properties(obj):
 
     return p, theta, phi
 
+
 def get_theta(px, py, pz):
     pt = math.sqrt(px**2 + py**2)
     return math.atan2(pt, pz)
 
+
 def get_phi(px, py):
     return math.atan2(py, px)
+
+
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()

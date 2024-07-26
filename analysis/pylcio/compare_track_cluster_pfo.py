@@ -45,10 +45,10 @@ def fill_histograms(h2d):
         reader.open(filename)
 
         for event in reader:
-            mcps = event.getCollection(MCPARTICLES) or []
-            trks = event.getCollection(TRACKS) or []
-            clus = event.getCollection(CLUSTERS) or []
-            pfos = event.getCollection(PFOS) or []
+            mcps = get_collection(event, MCPARTICLES)
+            trks = get_collection(event, TRACKS)
+            clus = get_collection(event, CLUSTERS)
+            pfos = get_collection(event, PFOS)
             mcp_p, mcp_theta, mcp_phi = get_leading_item(mcps)
             trk_p, trk_theta, trk_phi = get_leading_item(trks)
             clu_p, clu_theta, clu_phi = get_leading_item(clus)
@@ -59,6 +59,7 @@ def fill_histograms(h2d):
 
         reader.close()
 
+
 def plot_histograms(h2d):
     rootlogon()
     for i_hist, hist in enumerate(h2d.values()):
@@ -68,6 +69,7 @@ def plot_histograms(h2d):
         hist.Draw("colzsame")
         suff = suffix(i_hist, len(h2d))
         canv.Print(PDF + suff, "pdf")
+
 
 def suffix(counter, total):
     if total == 1:
@@ -80,6 +82,7 @@ def suffix(counter, total):
         else:
             return ""
         
+
 def get_histograms():
     h2d = {}
     h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy [GeV];Events", 100, 0, 1000, 100, 0, 1000)
@@ -87,12 +90,14 @@ def get_histograms():
     h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy [GeV];Events", 100, 0, 1000, 100, 0, 1000)
     return h2d
         
+
 def get_files(num=-1):
     files = sorted(glob.glob(DATA_PATH + "/*.slcio"))
     if num != -1:
         files = files[:num]
     print(f"Found {len(files)} files")
     return files
+
 
 def get_leading_item(col):
     if not col:
@@ -103,6 +108,7 @@ def get_leading_item(col):
         if this_p > p:
             p, theta, phi = this_p, this_theta, this_phi
     return p, theta, phi
+
 
 def get_properties(obj):
     if sum([isinstance(obj, pyLCIO.EVENT.MCParticle),
@@ -139,12 +145,15 @@ def get_properties(obj):
 
     return p, theta, phi
 
+
 def get_theta(px, py, pz):
     pt = math.sqrt(px**2 + py**2)
     return math.atan2(pt, pz)
 
+
 def get_phi(px, py):
     return math.atan2(py, px)
+
 
 def rootlogon():
     ROOT.gStyle.SetOptStat(0)
@@ -160,6 +169,7 @@ def rootlogon():
     ROOT.gStyle.SetPadBottomMargin(0.10)
     ROOT.gStyle.SetPadLeftMargin(0.15)
 
+
 def stylize(hist):
     size = 0.04
     hist.SetLineWidth(2)
@@ -174,6 +184,13 @@ def stylize(hist):
     hist.GetZaxis().SetTitleOffset(1.6)
     hist.GetZaxis().SetLabelOffset(0.003)
     hist.GetXaxis().SetNdivisions(505)
+
+
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()
