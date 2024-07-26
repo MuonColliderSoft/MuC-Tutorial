@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pyLCIO
 
-DATA_PATH = "/ospool/uc-shared/project/futurecolliders/data/fmeloni/DataMuC_MuColl10_v0A/v2/reco/pionGun_pT_50_250"
+DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/pionGun_pT_50_250"
 PDF = "plots.df.pdf"
 
 MCPARTICLES = "MCParticle"
