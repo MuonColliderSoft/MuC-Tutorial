@@ -3,12 +3,21 @@ import pyLCIO
 
 X, Y, Z = 0, 1, 2
 
-RELATIONS = "CaloHitsRelations"
-ALL_CAL_COLLECTIONS = [
-    "ECALBarrelHits",
-    "ECALEndcapHits",
-    "HCALBarrelHits",
-    "HCALEndcapHits",
+RELATIONS = [
+    "EcalBarrelRelationsSimDigi",
+    "EcalEndcapRelationsSimDigi",
+    "HcalBarrelRelationsSimDigi",
+    "HcalEndcapRelationsSimDigi",
+]
+
+DIGI_COLLECTIONS = [
+    "EcalBarrelCollectionDigi",
+    "EcalEndcapCollectionDigi",
+    "HcalBarrelCollectionDigi",
+    "HcalEndcapCollectionDigi",
+]
+
+SIM_COLLECTIONS = [
     "ECalBarrelCollection",
     "ECalEndcapCollection",
     "HCalBarrelCollection",
@@ -44,41 +53,42 @@ def main():
         if ops.n is not None and i_event >= ops.n:
             break
 
-        cols = {}
-        for col in ALL_CAL_COLLECTIONS:
-            cols[col] = event.getCollection(col) or []
-        rels = event.getCollection(RELATIONS) or []
+        for rel_name, digi_name, sim_name in zip(RELATIONS,
+                                                 DIGI_COLLECTIONS,
+                                                 SIM_COLLECTIONS,
+                                                 ):
 
-        for i_rel, rel in enumerate(rels):
+            rels = get_collection(event, rel_name)
 
-            if i_rel >= ops.nhits:
-                break
+            for i_rel, rel in enumerate(rels):
 
-            digi_hit, sim_hit = rel.getFrom(), rel.getTo()
+                if i_rel >= ops.nhits:
+                    break
 
-            def which_container_contains(hit):
-                return ",".join([col for col in cols if hit in cols[col]])
+                digi_hit, sim_hit = rel.getFrom(), rel.getTo()
 
-            digi_col = which_container_contains(digi_hit)
-            sim_col = which_container_contains(sim_hit)
+                digi_position = digi_hit.getPosition()
+                digi_x, digi_y, digi_z = (
+                    digi_position[X],
+                    digi_position[Y],
+                    digi_position[Z],
+                )
+                n_sim_contrib = sim_hit.getNMCContributions()
 
-            digi_position = digi_hit.getPosition()
-            digi_x, digi_y, digi_z = (
-                digi_position[X],
-                digi_position[Y],
-                digi_position[Z],
-            )
-            n_sim_contrib = sim_hit.getNMCContributions()
+                digi_print = f"Hit with x, y, z = {digi_x:7.1f}, {digi_y:7.1f}, {digi_z:7.1f} ({digi_name})"
+                sim_print = f"sim hit with {n_sim_contrib} MC contributions ({sim_name})"
 
-            digi_print = f"Hit with x, y, z = {digi_x:7.1f}, {digi_y:7.1f}, {digi_z:7.1f} ({digi_col})"
-            sim_print = f"sim hit with {n_sim_contrib} MC contributions ({sim_col})"
-
-            print(
-                f"Event {i_event} relation {i_rel}: {digi_print} linked to {sim_print}"
-            )
+                print(
+                    f"Event {i_event} relation {i_rel}: {digi_print} linked to {sim_print}"
+                )
 
         print("")
 
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()

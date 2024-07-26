@@ -42,8 +42,10 @@ def main():
     }
 
     for i_event, event in enumerate(reader):
+
         for col_name in CAL_COLLECTIONS:
-            collection = event.getCollection(col_name) or []
+
+            collection = get_collection(event, col_name)
 
             # get encoding, and create decoder
             if collection:
@@ -68,6 +70,11 @@ def main():
 
         print("")
 
+def get_collection(event, name):
+    names = event.getCollectionNames()
+    if name in names:
+        return event.getCollection(name)
+    return []
 
 if __name__ == "__main__":
     main()
