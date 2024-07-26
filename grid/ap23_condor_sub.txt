@@ -1,0 +1,17 @@
+#
+# condor_submit ap23_condor_sub.txt
+#
+Universe = Vanilla
++SingularityImage = "/cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-minimal:2.9-almalinux9"
+Executable = ap23_condor_exe.sh
+Requirements = ( HAS_SINGULARITY ) && ( HAS_CVMFS_unpacked_cern_ch )
+should_transfer_files = YES
+Output = ap23_condor_out.$(Cluster)_$(Process).txt
+Log = ap23_condor_log.$(Cluster)_$(Process).txt
+Error = ap23_condor_err.$(Cluster)_$(Process).txt
+when_to_transfer_output = ON_EXIT
+request_cpus = 1
+request_disk = 15 GB
+request_memory = 10 GB
++ProjectName="collab.muoncollider"
+Queue 1
