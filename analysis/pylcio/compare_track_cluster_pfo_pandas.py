@@ -77,12 +77,13 @@ def plot_dataframe(df):
     bins = np.linspace(0, 300, 100)
     cbar = [None] * len(ax)
     for i, (obj, measure, prefix) in enumerate(zip(objects, measures, prefixs)):
+        ax[i].set_title(f"{obj}")
         ax[i].set_xlabel("True energy [GeV]")
         ax[i].set_ylabel(f"{obj} {measure} [GeV]")
         _, _, _, im = ax[i].hist2d(df["mcp_p"], df[f"{prefix}_p"], bins=bins, cmap="plasma", cmin=0.1)
         cbar[i] = fig.colorbar(im, ax=ax[i])
         cbar[i].set_label("Events")
-    fig.subplots_adjust(wspace=0.3, hspace=0.3, bottom=0.14, left=0.05, right=0.95, top=0.95)
+    fig.subplots_adjust(wspace=0.3, hspace=0.3, bottom=0.14, left=0.05, right=0.95, top=0.93)
     print(f"Writing to {PDF} ...")
     plt.savefig(PDF)
 
