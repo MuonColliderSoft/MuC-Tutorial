@@ -7,7 +7,7 @@ import pyLCIO
 import ROOT
 ROOT.gROOT.SetBatch()
 
-DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/pionGun_pT_50_250"
+DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/electronGun_E_50_250"
 PDF = "plots.pdf"
 
 MCPARTICLES = "MCParticle"
@@ -85,9 +85,9 @@ def suffix(counter, total):
 
 def get_histograms():
     h2d = {}
-    h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy [GeV];Events", 100, 0, 1000, 100, 0, 1000)
-    h2d["mcp_vs_trk_p"] = ROOT.TH2D("mcp_vs_trk_p", ";True momentum [GeV];Track momentum [GeV];Events", 100, 0, 1000, 100, 0, 1000)
-    h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy [GeV];Events", 100, 0, 1000, 100, 0, 1000)
+    h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy [GeV];Events", 100, 0, 300, 100, 0, 300)
+    h2d["mcp_vs_trk_p"] = ROOT.TH2D("mcp_vs_trk_p", ";True momentum [GeV];Track momentum [GeV];Events", 100, 0, 300, 100, 0, 300)
+    h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy [GeV];Events", 100, 0, 300, 100, 0, 300)
     return h2d
         
 
