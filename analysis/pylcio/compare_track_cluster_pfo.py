@@ -8,7 +8,7 @@ import ROOT
 ROOT.gROOT.SetBatch()
 
 DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/electronGun_E_50_250"
-PDF = "plots.pdf"
+PDF = "electrons.pdf"
 
 MCPARTICLES = "MCParticle"
 CLUSTERS = "PandoraClusters"

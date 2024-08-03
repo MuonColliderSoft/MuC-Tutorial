@@ -6,8 +6,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pyLCIO
 
-DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/pionGun_pT_50_250"
-PDF = "plots.df.pdf"
+DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/electronGun_E_50_250"
+PDF = "electrons.df.pdf"
 
 MCPARTICLES = "MCParticle"
 CLUSTERS = "PandoraClusters"
@@ -51,6 +51,7 @@ def get_dataframe():
 
     return pd.DataFrame(data)
 
+
 def get_events():
 
     print("Opening slcio files ...")
@@ -66,13 +67,14 @@ def get_events():
 
         reader.close()
 
+
 def plot_dataframe(df):
     print(df)
     fig, ax = plt.subplots(figsize=(13, 4), ncols=3)
     objects = ["Cluster", "Track", "PFO"]
     measures = ["energy", "momentum", "energy"]
     prefixs = ["clu", "trk", "pfo"]
-    bins = np.linspace(0, 1000, 100)
+    bins = np.linspace(0, 300, 100)
     cbar = [None] * len(ax)
     for i, (obj, measure, prefix) in enumerate(zip(objects, measures, prefixs)):
         ax[i].set_xlabel("True energy [GeV]")
@@ -81,14 +83,17 @@ def plot_dataframe(df):
         cbar[i] = fig.colorbar(im, ax=ax[i])
         cbar[i].set_label("Events")
     fig.subplots_adjust(wspace=0.3, hspace=0.3, bottom=0.14, left=0.05, right=0.95, top=0.95)
+    print(f"Writing to {PDF} ...")
     plt.savefig(PDF)
-        
+
+
 def get_files(num=-1):
     files = sorted(glob.glob(DATA_PATH + "/*.slcio"))
     if num != -1:
         files = files[:num]
     print(f"Found {len(files)} files")
     return files
+
 
 def get_leading_item(event, col_name):
     col = get_collection(event, col_name)
@@ -102,6 +107,7 @@ def get_leading_item(event, col_name):
         if this_p > p:
             p, theta, phi = this_p, this_theta, this_phi
     return p, theta, phi
+
 
 def get_properties(obj):
     if sum([isinstance(obj, pyLCIO.EVENT.MCParticle),

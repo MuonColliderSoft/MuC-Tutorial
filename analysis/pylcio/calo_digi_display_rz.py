@@ -127,7 +127,7 @@ def stylize(hist):
     hist.GetZaxis().SetTitleSize(size)
     hist.GetZaxis().SetLabelSize(size)
     hist.GetXaxis().SetTitleOffset(1.2)
-    hist.GetYaxis().SetTitleOffset(1.6)
+    hist.GetYaxis().SetTitleOffset(1.7)
     hist.GetZaxis().SetTitleOffset(1.6)
     hist.GetZaxis().SetLabelOffset(0.003)
     hist.GetXaxis().SetNdivisions(505)
