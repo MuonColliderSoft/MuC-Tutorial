@@ -64,5 +64,6 @@ def get_collection(event, name):
         return event.getCollection(name)
     return []
 
+
 if __name__ == "__main__":
     main()

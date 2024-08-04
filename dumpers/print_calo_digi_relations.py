@@ -53,10 +53,11 @@ def main():
         if ops.n is not None and i_event >= ops.n:
             break
 
-        for rel_name, digi_name, sim_name in zip(RELATIONS,
-                                                 DIGI_COLLECTIONS,
-                                                 SIM_COLLECTIONS,
-                                                 ):
+        for rel_name, digi_name, sim_name in zip(
+            RELATIONS,
+            DIGI_COLLECTIONS,
+            SIM_COLLECTIONS,
+        ):
 
             rels = get_collection(event, rel_name)
 
@@ -76,7 +77,9 @@ def main():
                 n_sim_contrib = sim_hit.getNMCContributions()
 
                 digi_print = f"Hit with x, y, z = {digi_x:7.1f}, {digi_y:7.1f}, {digi_z:7.1f} ({digi_name})"
-                sim_print = f"sim hit with {n_sim_contrib} MC contributions ({sim_name})"
+                sim_print = (
+                    f"sim hit with {n_sim_contrib} MC contributions ({sim_name})"
+                )
 
                 print(
                     f"Event {i_event} relation {i_rel}: {digi_print} linked to {sim_print}"
@@ -84,11 +87,13 @@ def main():
 
         print("")
 
+
 def get_collection(event, name):
     names = event.getCollectionNames()
     if name in names:
         return event.getCollection(name)
     return []
+
 
 if __name__ == "__main__":
     main()

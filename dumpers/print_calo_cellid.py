@@ -70,11 +70,13 @@ def main():
 
         print("")
 
+
 def get_collection(event, name):
     names = event.getCollectionNames()
     if name in names:
         return event.getCollection(name)
     return []
+
 
 if __name__ == "__main__":
     main()
