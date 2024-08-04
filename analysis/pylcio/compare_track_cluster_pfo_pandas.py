@@ -25,10 +25,12 @@ X, Y, Z = 0, 1, 2
 BFIELD = 5
 FACTOR = 3e-4
 
+
 def main():
 
     df = get_dataframe()
     plot_dataframe(df)
+
 
 def get_dataframe():
 
@@ -80,10 +82,14 @@ def plot_dataframe(df):
         ax[i].set_title(f"{obj}")
         ax[i].set_xlabel("True energy [GeV]")
         ax[i].set_ylabel(f"{obj} {measure} [GeV]")
-        _, _, _, im = ax[i].hist2d(df["mcp_p"], df[f"{prefix}_p"], bins=bins, cmap="plasma", cmin=0.1)
+        _, _, _, im = ax[i].hist2d(
+            df["mcp_p"], df[f"{prefix}_p"], bins=bins, cmap="plasma", cmin=0.1
+        )
         cbar[i] = fig.colorbar(im, ax=ax[i])
         cbar[i].set_label("Events")
-    fig.subplots_adjust(wspace=0.3, hspace=0.3, bottom=0.14, left=0.05, right=0.95, top=0.93)
+    fig.subplots_adjust(
+        wspace=0.3, hspace=0.3, bottom=0.14, left=0.05, right=0.95, top=0.93
+    )
     print(f"Writing to {PDF} ...")
     plt.savefig(PDF)
 
@@ -111,11 +117,17 @@ def get_leading_item(event, col_name):
 
 
 def get_properties(obj):
-    if sum([isinstance(obj, pyLCIO.EVENT.MCParticle),
-            isinstance(obj, pyLCIO.EVENT.Track),
-            isinstance(obj, pyLCIO.EVENT.Cluster),
-            isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
-            ]) > 1:
+    if (
+        sum(
+            [
+                isinstance(obj, pyLCIO.EVENT.MCParticle),
+                isinstance(obj, pyLCIO.EVENT.Track),
+                isinstance(obj, pyLCIO.EVENT.Cluster),
+                isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
+            ]
+        )
+        > 1
+    ):
         raise Exception("This object is too many things!!")
 
     if isinstance(obj, pyLCIO.EVENT.Track):
@@ -132,9 +144,12 @@ def get_properties(obj):
     elif isinstance(obj, pyLCIO.EVENT.Cluster):
         p, theta, phi = obj.getEnergy(), obj.getITheta(), obj.getIPhi()
 
-    elif any([isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
-              isinstance(obj, pyLCIO.EVENT.MCParticle),
-              ]):
+    elif any(
+        [
+            isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
+            isinstance(obj, pyLCIO.EVENT.MCParticle),
+        ]
+    ):
         momentum, energy = obj.getMomentum(), obj.getEnergy()
         px, py, pz = momentum[X], momentum[Y], momentum[Z]
         theta, phi = get_theta(px, py, pz), get_phi(px, py)
@@ -160,6 +175,7 @@ def get_collection(event, name):
     if name in names:
         return event.getCollection(name)
     return []
+
 
 if __name__ == "__main__":
     main()

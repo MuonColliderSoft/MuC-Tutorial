@@ -3,6 +3,7 @@ import pyLCIO
 from pyLCIO import EVENT, UTIL
 
 import ROOT
+
 ROOT.gROOT.SetBatch()
 
 DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/photonGun_E_250_1000"
@@ -16,11 +17,24 @@ COLS = [
     ECAL_ENDCAP,
 ]
 
+
 def main():
     nlayers = 50
     ytitle = "N(digi hits per event)"
-    barrel_occ = ROOT.TH1F("barrel_occ", f"Barrel Occupancy;Barrel Layer;{ytitle}", nlayers, -0.5, nlayers-0.5)
-    endcap_occ = ROOT.TH1F("endcap_occ", f"Endcap Occupancy;Endcap Layer;{ytitle}", nlayers, -0.5, nlayers-0.5)
+    barrel_occ = ROOT.TH1F(
+        "barrel_occ",
+        f"Barrel Occupancy;Barrel Layer;{ytitle}",
+        nlayers,
+        -0.5,
+        nlayers - 0.5,
+    )
+    endcap_occ = ROOT.TH1F(
+        "endcap_occ",
+        f"Endcap Occupancy;Endcap Layer;{ytitle}",
+        nlayers,
+        -0.5,
+        nlayers - 0.5,
+    )
     fill_histograms(barrel_occ, endcap_occ)
     plot_histograms(barrel_occ, endcap_occ)
 
@@ -102,8 +116,6 @@ def rootlogon():
     ROOT.gStyle.SetPaintTextFormat(".2f")
     ROOT.gStyle.SetTextFont(42)
     ROOT.gStyle.SetFillColor(10)
-    # ROOT.gStyle.SetPalette(ROOT.kCherry)
-    # ROOT.TColor.InvertPalette()
     ROOT.gStyle.SetPadTopMargin(0.06)
     ROOT.gStyle.SetPadRightMargin(0.19)
     ROOT.gStyle.SetPadBottomMargin(0.10)
@@ -124,6 +136,7 @@ def stylize(hist):
     hist.GetZaxis().SetTitleOffset(1.6)
     hist.GetZaxis().SetLabelOffset(0.003)
     hist.GetXaxis().SetNdivisions(505)
+
 
 if __name__ == "__main__":
     main()

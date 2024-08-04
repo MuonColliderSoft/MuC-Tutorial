@@ -5,6 +5,7 @@ import os
 import pyLCIO
 
 import ROOT
+
 ROOT.gROOT.SetBatch()
 
 DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/electronGun_E_50_250"
@@ -26,11 +27,13 @@ X, Y, Z = 0, 1, 2
 BFIELD = 5
 FACTOR = 3e-4
 
+
 def main():
 
     h2d = get_histograms()
     fill_histograms(h2d)
     plot_histograms(h2d)
+
 
 def fill_histograms(h2d):
 
@@ -81,15 +84,42 @@ def suffix(counter, total):
             return ")"
         else:
             return ""
-        
+
 
 def get_histograms():
     h2d = {}
-    h2d["mcp_vs_clu_p"] = ROOT.TH2D("mcp_vs_clu_p", ";True momentum [GeV];Cluster energy [GeV];Events", 100, 0, 300, 100, 0, 300)
-    h2d["mcp_vs_trk_p"] = ROOT.TH2D("mcp_vs_trk_p", ";True momentum [GeV];Track momentum [GeV];Events", 100, 0, 300, 100, 0, 300)
-    h2d["mcp_vs_pfo_p"] = ROOT.TH2D("mcp_vs_pfo_p", ";True momentum [GeV];PFO energy [GeV];Events", 100, 0, 300, 100, 0, 300)
+    h2d["mcp_vs_clu_p"] = ROOT.TH2D(
+        "mcp_vs_clu_p",
+        ";True momentum [GeV];Cluster energy [GeV];Events",
+        100,
+        0,
+        300,
+        100,
+        0,
+        300,
+    )
+    h2d["mcp_vs_trk_p"] = ROOT.TH2D(
+        "mcp_vs_trk_p",
+        ";True momentum [GeV];Track momentum [GeV];Events",
+        100,
+        0,
+        300,
+        100,
+        0,
+        300,
+    )
+    h2d["mcp_vs_pfo_p"] = ROOT.TH2D(
+        "mcp_vs_pfo_p",
+        ";True momentum [GeV];PFO energy [GeV];Events",
+        100,
+        0,
+        300,
+        100,
+        0,
+        300,
+    )
     return h2d
-        
+
 
 def get_files(num=-1):
     files = sorted(glob.glob(DATA_PATH + "/*.slcio"))
@@ -111,11 +141,17 @@ def get_leading_item(col):
 
 
 def get_properties(obj):
-    if sum([isinstance(obj, pyLCIO.EVENT.MCParticle),
-            isinstance(obj, pyLCIO.EVENT.Track),
-            isinstance(obj, pyLCIO.EVENT.Cluster),
-            isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
-            ]) > 1:
+    if (
+        sum(
+            [
+                isinstance(obj, pyLCIO.EVENT.MCParticle),
+                isinstance(obj, pyLCIO.EVENT.Track),
+                isinstance(obj, pyLCIO.EVENT.Cluster),
+                isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
+            ]
+        )
+        > 1
+    ):
         raise Exception("This object is too many things!!")
 
     if isinstance(obj, pyLCIO.EVENT.Track):
@@ -132,9 +168,12 @@ def get_properties(obj):
     elif isinstance(obj, pyLCIO.EVENT.Cluster):
         p, theta, phi = obj.getEnergy(), obj.getITheta(), obj.getIPhi()
 
-    elif any([isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
-              isinstance(obj, pyLCIO.EVENT.MCParticle),
-              ]):
+    elif any(
+        [
+            isinstance(obj, pyLCIO.EVENT.ReconstructedParticle),
+            isinstance(obj, pyLCIO.EVENT.MCParticle),
+        ]
+    ):
         momentum, energy = obj.getMomentum(), obj.getEnergy()
         px, py, pz = momentum[X], momentum[Y], momentum[Z]
         theta, phi = get_theta(px, py, pz), get_phi(px, py)
@@ -162,8 +201,6 @@ def rootlogon():
     ROOT.gStyle.SetPaintTextFormat(".2f")
     ROOT.gStyle.SetTextFont(42)
     ROOT.gStyle.SetFillColor(10)
-    # ROOT.gStyle.SetPalette(ROOT.kCherry)
-    # ROOT.TColor.InvertPalette()
     ROOT.gStyle.SetPadTopMargin(0.06)
     ROOT.gStyle.SetPadRightMargin(0.19)
     ROOT.gStyle.SetPadBottomMargin(0.10)
@@ -191,6 +228,7 @@ def get_collection(event, name):
     if name in names:
         return event.getCollection(name)
     return []
+
 
 if __name__ == "__main__":
     main()

@@ -3,6 +3,7 @@ import math
 import pyLCIO
 
 import ROOT
+
 ROOT.gROOT.SetBatch()
 
 DATA_PATH = "/ospool/uc-shared/project/muoncollider/tutorial2024/photonGun_E_250_1000"
@@ -23,9 +24,19 @@ COLS = [
 PHOTON = 22
 STABLE = 1
 
+
 def main():
     nlayers = 50
-    hist = ROOT.TH2F("rt", ";Sim. MC Contribution Time [ns];Digit Hit R [mm];Sim. MC Contribution Energy [GeV]", 100, 6.5, 8.2, 100, 1880, 2200)
+    hist = ROOT.TH2F(
+        "rt",
+        ";Sim. MC Contribution Time [ns];Digit Hit R [mm];Sim. MC Contribution Energy [GeV]",
+        200,
+        5.0,
+        10.0,
+        200,
+        1700,
+        2300,
+    )
     fill_histogram(hist)
     plot_histogram(hist)
 
@@ -90,7 +101,6 @@ def plot_histogram(hist):
     canv.Print(PDF + ")", "pdf")
 
 
-
 def get_collection(event, name):
     names = event.getCollectionNames()
     if name in names:
@@ -133,8 +143,6 @@ def rootlogon():
     ROOT.gStyle.SetPaintTextFormat(".2f")
     ROOT.gStyle.SetTextFont(42)
     ROOT.gStyle.SetFillColor(10)
-    # ROOT.gStyle.SetPalette(ROOT.kCherry)
-    # ROOT.TColor.InvertPalette()
     ROOT.gStyle.SetPadTopMargin(0.06)
     ROOT.gStyle.SetPadRightMargin(0.19)
     ROOT.gStyle.SetPadBottomMargin(0.10)
@@ -155,6 +163,7 @@ def stylize(hist):
     hist.GetZaxis().SetTitleOffset(1.6)
     hist.GetZaxis().SetLabelOffset(0.003)
     hist.GetXaxis().SetNdivisions(505)
+
 
 if __name__ == "__main__":
     main()
